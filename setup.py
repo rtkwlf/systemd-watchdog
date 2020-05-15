@@ -9,7 +9,7 @@ setup(
     version="0.0.1",
     py_modules=["systemd_watchdog"],
     author="AaronDMarasco",
-    author_email="sd-notify@marascos.net",
+    author_email="systemd-watchdog@marascos.net",
     description="sd_notify and sd_watchdog_enabled functionality for writing Python daemons under systemd",
     long_description=readme(),
     long_description_content_type="text/markdown",
