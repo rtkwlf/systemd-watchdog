@@ -1,18 +1,18 @@
-This is an example showing how to use daemon.py to experiment with sd_notify
+This is an example showing how to use daemon.py to experiment with systemd_watchdog
 
 To install:
-systemctl --user link $(pwd)/sd-notify-example.service
-systemctl --user daemon-reload  # any time you modify sd-notify-example.service or restart StartLimit timers
+systemctl --user link $(pwd)/systemd-watchdog-example.service
+systemctl --user daemon-reload  # any time you modify systemd-watchdog-example.service or restart StartLimit timers
 
 To start:
-systemctl --user start sd-notify-example.service
+systemctl --user start systemd-watchdog-example.service
 
 To check / view logs:
-systemctl --user status sd-notify-example.service
-journalctl --user -eu sd-notify-example
+systemctl --user status systemd-watchdog-example.service
+journalctl --user -eu systemd-watchdog-example
 
 To stop:
-systemctl --user stop sd-notify-example.service
+systemctl --user stop systemd-watchdog-example.service
 
 Things to try:
  - Play with daemon.py!

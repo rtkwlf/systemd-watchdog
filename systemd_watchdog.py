@@ -1,41 +1,13 @@
 """
-sd_notify(3) and sd_watchdog_enabled(3) client functionality implemented in Python 3
+sd_notify(3) and sd_watchdog_enabled(3) client functionality implemented in Python 3 for writing Python daemons
 
-Usage:
-```
-import sd_notify
-
-notify = sd_notify.Notifier()
-if not notify.is_enabled:
-    # Then it's probably not running is systemd with watchdog enabled
-        raise Exception("Watchdog not enabled")
-
-# Report a status message
-notify.status("Starting my service...")
-time.sleep(3)
-
-# Report that the program init is complete
-notify.ready()
-notify.status("Waiting for web requests...")
-notify.notify()
-time.sleep(3)
-
-# Compute time between notifications
-timeout_half_sec = int(float(notify.timeout) / 2e6)  # Convert us->s and half that
-time.sleep(timeout_half_sec)
-notify.notify()
-
-# Report an error to the service manager
-notify.notify_error("An irrecoverable error occured!")
-# The service manager will probably kill the program here
-time.sleep(3)
-```
+See README.md and examples/daemon.py for usage
 """
 from datetime import timedelta, datetime
 import os
 import socket
 
-class Notifier():
+class watchdog():
     def __init__(self, sock=None, addr=None):
         self._socket = sock or socket.socket(family=socket.AF_UNIX,
                                              type=socket.SOCK_DGRAM)
@@ -60,14 +32,10 @@ class Notifier():
         if self.is_enabled:
             self._socket.sendto(msg.encode(), self._address)
 
-    def enabled(self):
-        """Return a boolean stating whether watchdog is enabled"""
-        return bool(self._address)
-
     @property
     def is_enabled(self):
         """Property indicating whether watchdog is enabled"""
-        return self.enabled()
+        return bool(self._address)
 
     def notify(self):
         """Report a healthy service state"""

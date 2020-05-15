@@ -1,10 +1,10 @@
-# sd_notify
+# systemd_watchdog
 
-sd_notify(3) and sd_watchdog_enabled(3) client functionality implemented in Python 3
+sd_notify(3) and sd_watchdog_enabled(3) client functionality implemented in Python 3 for writing Python daemons
 
 ## Install
 ```
-$ pip install sd-notify
+$ pip install systemd-watchdog
 ```
 or
 ```
@@ -15,40 +15,39 @@ $ make install
 ## Usage
 
 ```python
-import sd_notify
+import systemd_watchdog
 
-notify = sd_notify.Notifier()
-if not notify.enabled():
+wd = systemd_watchdog.watchdog()
+if not wd.enabled():
     # Then it's probably not running is systemd with watchdog enabled
     raise Exception("Watchdog not enabled")
 
 # Report a status message
-notify.status("Starting my service...")
+wd.status("Starting my service...")
 time.sleep(3)
 
 # Report that the program init is complete
-notify.ready()
-notify.status("Waiting for web requests...")
-notify.notify()
+wd.ready()
+wd.status("Waiting for web requests...")
+wd.notify()
 time.sleep(3)
 
 # Compute time between notifications
-timeout_half_sec = int(float(notify.timeout) / 2e6)  # Convert us->s and half that
+timeout_half_sec = int(float(wd.timeout) / 2e6)  # Convert us->s and half that
 time.sleep(timeout_half_sec)
-notify.notify()
+wd.notify()
 
 # Report an error to the service manager
-notify.notify_error("An irrecoverable error occured!")
+wd.notify_error("An irrecoverable error occured!")
 # The service manager will probably kill the program here
 time.sleep(3)
 ```
 
 ## Public Reference
-### `<class 'sd_notify.Notifier'>`
+### `<class 'systemd_watchdog.watchdog'>`
 
 #### `is_enabled`
 Boolean property stating whether watchdog capability is enabled.
-Legacy version `enabled()` is also available.
 
 #### `timeout`
 Property reporting the number of microseconds (int) before process will be killed.
@@ -75,11 +74,11 @@ Report ready service state, _i.e._ completed initialisation (only needed with `T
 #### `status(msg)`
 Send a service status message.
 
-## Original Author
-
-stig@stigok.com Dec 2019
+## History
+Aaron D. Marasco May 2020
+ * Forked from the sd-notify project <https://github.com/stigok/sd-notify>
  * Additional contributors can be found in GitHub repository history
 
 ## License
 
-See LICENSE file
+See `LICENSE` file
