@@ -1,5 +1,5 @@
-.PHONY: build clean help install uninstall test upload-test wheel_check
-.SILENT: help install uninstall test wheel_check
+.PHONY: build clean help install pypi-deploy test uninstall wheel_check
+.SILENT: help install pypi-deploy test uninstall wheel_check
 
 define HELP
 
@@ -25,15 +25,15 @@ clean:
 	rm -rf build dist *.egg-info __pycache__
 
 install: build uninstall
-	pip3 install --user ./dist/sd_notify-*.whl
+	pip3 install --user ./dist/*.whl
 
 uninstall:
-	-pip3 uninstall -y sd_notify
+	-pip3 uninstall -y systemd_watchdog
 
 test:
-	./test_sd_notify.py
+	./test_systemd_watchdog.py
 
-upload-test:
+pypi-deploy:  # TODO FIXME
 	python3 -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 WHEEL_INSTALLED = $(shell pip3 list | egrep '^wheel\s')

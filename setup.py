@@ -5,20 +5,20 @@ def readme():
         return f.read()
 
 setup(
-    name="sd-notify",
-    version="0.2.0",
-    py_modules=["sd_notify"],
-    author="stigok",
-    author_email="stig@stigok.com",
-    description="Simple sd_notify client library for Python 3",
+    name="systemd-watchdog",
+    version="0.0.1",
+    py_modules=["systemd_watchdog"],
+    author="AaronDMarasco",
+    author_email="sd-notify@marascos.net",
+    description="sd_notify and sd_watchdog_enabled functionality for writing Python daemons under systemd",
     long_description=readme(),
     long_description_content_type="text/markdown",
-    keywords="sd-notify systemd python3 watchdog",
-    url="http://github.com/stigok/sd-notify/",
+    keywords="sd_notify sd_watchdog_enabled systemd python3 watchdog",
+    url="http://github.com/AaronDMarasco/systemd-watchdog/",
     project_urls={
-        "Bug Tracker": "http://github.com/stigok/sd-notify/issues",
-        "Documentation": "http://github.com/stigok/sd-notify/",
-        "Source Code": "http://github.com/stigok/sd-notify/",
+        "Bug Tracker": "http://github.com/AaronDMarasco/systemd-watchdog/issues",
+        "Documentation": "http://github.com/AaronDMarasco/systemd-watchdog/",
+        "Source Code": "http://github.com/AaronDMarasco/systemd-watchdog/",
     },
     classifiers=[
         "License :: OSI Approved :: MIT License",
