@@ -1,0 +1,21 @@
+language: python
+
+cache: pip
+
+python:
+  - 3.5
+  - 3.6
+  - 3.7
+  - 3.8
+  - pypy3
+
+branches:
+  except:
+    - /^[0-9]+\.[0-9]+\.[0-9]+/
+
+install:
+  - pip install pipenv
+  - pipenv install --dev --skip-lock
+
+script:
+  pipenv run pytest ./test_systemd_watchdog.py

@@ -33,8 +33,8 @@ uninstall:
 test:
 	./test_systemd_watchdog.py
 
-pypi-deploy:  # TODO FIXME
-	python3 -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+pypi-deploy: build test
+	twine upload --repository pypi dist/*
 
 WHEEL_INSTALLED = $(shell pip3 list | egrep '^wheel\s')
 wheel_check:

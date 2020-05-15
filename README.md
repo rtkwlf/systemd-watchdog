@@ -1,5 +1,12 @@
 # systemd_watchdog
 
+![](https://img.shields.io/pypi/l/systemd-watchdog)
+![](https://img.shields.io/pypi/v/systemd-watchdog.svg)
+![](https://img.shields.io/travis/com/aarondmarasco/systemd-watchdog)
+![](https://img.shields.io/badge/tested%20versions-3.5%7C3.6%7C3.7%7C3.8%7Cpypy3-success)
+![](https://img.shields.io/pypi/wheel/systemd-watchdog.svg)
+![](https://img.shields.io/pypi/pyversions/systemd-watchdog.svg)
+
 sd_notify(3) and sd_watchdog_enabled(3) client functionality implemented in Python 3 for writing Python daemons
 
 ## Install
