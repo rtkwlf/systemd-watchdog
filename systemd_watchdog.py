@@ -13,7 +13,7 @@ class watchdog():
         self._lastcall = datetime.fromordinal(1)
         self._socket = sock or socket.socket(family=socket.AF_UNIX,
                                              type=socket.SOCK_DGRAM)
-        self._timeout_td = timedelta(0)
+        self._timeout_td = timedelta(hours=24)  # Safe value to do math with; if disabled won't matter
 
         # Note this fix is untested in a live system; https://unix.stackexchange.com/q/206386
         if self._address and self._address[0] == '@':
@@ -38,7 +38,7 @@ class watchdog():
         return bool(self._address)
 
     def notify(self):
-        """Report a healthy service state"""
+        """Send healthy notification to systemd"""
         self._lastcall = datetime.now()
         self._send("WATCHDOG=1\n")
 
@@ -56,12 +56,20 @@ class watchdog():
             self.status(msg)
         self._send("WATCHDOG=trigger\n")
 
+    def ping(self):
+        """Send healthy notification to systemd if prudent to"""
+        if self.notify_due:
+            self.notify()
+            return True
+        return False
+    beat = ping  # alias for ping if you prefer heartbeat terminology
+
     def ready(self):
         """Report ready service state, i.e. completed init"""
         self._send("READY=1\n")
 
     def status(self, msg):
-        """Set a service status message"""
+        """Send a free-form service status message"""
         self._send("STATUS=%s\n" % (msg,))
 
     @property

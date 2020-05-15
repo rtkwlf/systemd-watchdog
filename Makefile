@@ -33,7 +33,7 @@ uninstall:
 test:
 	./test_systemd_watchdog.py
 
-pypi-deploy: build test
+pypi-deploy: build test ~/.pypirc
 	twine upload --repository pypi dist/*
 
 WHEEL_INSTALLED = $(shell pip3 list | egrep '^wheel\s')

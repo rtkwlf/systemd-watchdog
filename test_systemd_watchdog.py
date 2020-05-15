@@ -126,7 +126,7 @@ class WatchdogTestCase(TestCase):
             cut = watchdog(sock=Mock(spec=["sendto"]))
             self.assertEqual(cut.timeout, 0)
 
-    def test_timeout_due(self):
+    def test_timeouts(self):
         test_dict = {"NOTIFY_SOCKET": self.TEST_ADDR,
                      "WATCHDOG_USEC": "2000000",  # 2s
                     }
@@ -141,6 +141,27 @@ class WatchdogTestCase(TestCase):
                 self.assertIs(cut.notify_due, False)  # Still shouldn't
                 sleep(0.4)
                 self.assertIs(cut.notify_due, True)  # Now it should
+
+        with patch("systemd_watchdog.watchdog._send")  as patched_send:
+            # Similar to above, but instead we intercept send and leave the logic to ping()
+            with patch.dict(os.environ, test_dict, clear=True):
+                cut = watchdog(sock=sentinel.socket)
+                self.assertEqual(cut.timeout, 2000000)
+                self.assertIs(cut.notify_due, True)  # At start, it is "overdue" since never sent
+                cut.notify()
+                patched_send.assert_called_once_with("WATCHDOG=1\n")
+                patched_send.reset_mock()
+                res = cut.ping()
+                self.assertIs(res, False)  # It shouldn't be expecting already
+                patched_send.assert_not_called()
+                sleep(0.7)
+                res = cut.ping()
+                self.assertIs(res, False)  # Still shouldn't
+                patched_send.assert_not_called()
+                sleep(0.4)
+                res = cut.beat()  # Test the alias
+                self.assertIs(res, True)  # Now it should
+                patched_send.assert_called_once_with("WATCHDOG=1\n")
 
 
 if __name__ == '__main__':

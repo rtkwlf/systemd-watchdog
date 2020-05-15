@@ -6,7 +6,7 @@ def readme():
 
 setup(
     name="systemd-watchdog",
-    version="0.0.1",
+    version="0.9.0",
     py_modules=["systemd_watchdog"],
     author="AaronDMarasco",
     author_email="systemd-watchdog@marascos.net",

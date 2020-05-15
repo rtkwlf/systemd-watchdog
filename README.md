@@ -50,9 +50,23 @@ wd.notify_error("An irrecoverable error occured!")
 time.sleep(3)
 ```
 
-## Public Reference
-### `<class 'systemd_watchdog.watchdog'>`
+## Public Interface
+### `systemd_watchdog.watchdog` - commonly used properties and methods
+#### `ping`
+The only method required for the simplest implementation; combines `notify_due` with `notify()` to _only_ send "alive" notifications at reasonable intervals.
 
+Returns boolean indicating if a message was sent or not.
+
+#### `beat`
+Alias for `ping()` if you prefer heartbeat terminology.
+
+#### `ready()`
+Report ready service state, _i.e._ completed init (only needed with `Type=notify`).
+
+#### `status(msg)`
+Send a service status message.
+
+### `systemd_watchdog.watchdog` - less-used properties and methods
 #### `is_enabled`
 Boolean property stating whether watchdog capability is enabled.
 
@@ -75,11 +89,6 @@ Report an error to the watchdog manager. This program will likely be killed upon
 
 If `msg` is provided, it will be reported as a status message prior to the error.
 
-#### `ready()`
-Report ready service state, _i.e._ completed initialisation (only needed with `Type=notify`)
-
-#### `status(msg)`
-Send a service status message.
 
 ## History
 Aaron D. Marasco May 2020
