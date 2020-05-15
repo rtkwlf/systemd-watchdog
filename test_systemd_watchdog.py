@@ -119,12 +119,13 @@ class WatchdogTestCase(TestCase):
         # somebody's going to try to test us in a container and get mad when we were PID 1
         with patch.dict(os.environ, {"WATCHDOG_PID": str(1), **test_dict}, clear=True):
             cut = watchdog(sock=Mock(spec=["sendto"]))
-            self.assertEqual(cut.timeout, 0)
+            default_timeout = cut._default_timeout/timedelta(microseconds=1)
+            self.assertEqual(cut.timeout, default_timeout)
 
         # worse PID
         with patch.dict(os.environ, {"WATCHDOG_PID": "not even a number", **test_dict}, clear=True):
             cut = watchdog(sock=Mock(spec=["sendto"]))
-            self.assertEqual(cut.timeout, 0)
+            self.assertEqual(cut.timeout, default_timeout)
 
     def test_timeouts(self):
         test_dict = {"NOTIFY_SOCKET": self.TEST_ADDR,

@@ -8,12 +8,13 @@ import os
 import socket
 
 class watchdog():
+    _default_timeout = timedelta(hours=24)  # Safe value to do math with; if disabled won't matter
     def __init__(self, sock=None, addr=None):
         self._address = addr or os.getenv("NOTIFY_SOCKET")
         self._lastcall = datetime.fromordinal(1)
         self._socket = sock or socket.socket(family=socket.AF_UNIX,
                                              type=socket.SOCK_DGRAM)
-        self._timeout_td = timedelta(hours=24)  # Safe value to do math with; if disabled won't matter
+        self._timeout_td = self._default_timeout
 
         # Note this fix is untested in a live system; https://unix.stackexchange.com/q/206386
         if self._address and self._address[0] == '@':
