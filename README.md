@@ -23,9 +23,10 @@ $ make install
 
 ```python
 import systemd_watchdog
+import time
 
 wd = systemd_watchdog.watchdog()
-if not wd.enabled():
+if not wd.is_enabled:
     # Then it's probably not running is systemd with watchdog enabled
     raise Exception("Watchdog not enabled")
 
