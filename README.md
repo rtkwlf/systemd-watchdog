@@ -20,7 +20,7 @@ $ make install
 ```
 
 ## Usage
-
+### `example.py`
 ```python
 import systemd_watchdog
 import time
@@ -36,19 +36,54 @@ time.sleep(3)
 
 # Report that the program init is complete
 wd.ready()
-wd.status("Waiting for web requests...")
+wd.status("Init is complete...")
 wd.notify()
 time.sleep(3)
 
 # Compute time between notifications
 timeout_half_sec = int(float(wd.timeout) / 2e6)  # Convert us->s and half that
+wd.status("Sleeping and then notify x 3")
 time.sleep(timeout_half_sec)
 wd.notify()
+time.sleep(timeout_half_sec)
+wd.notify()
+time.sleep(timeout_half_sec)
+wd.notify()
+wd.status("Spamming loop - should only see 2-3 notifications")
+t = float(0)
+while t <= 4*timeout_half_sec:
+    time.sleep(0.05)
+    wd.ping()
+    t += 0.05
 
 # Report an error to the service manager
 wd.notify_error("An irrecoverable error occured!")
 # The service manager will probably kill the program here
 time.sleep(3)
+```
+### Quick Example
+In one terminal:
+`socat unix-recv:/tmp/tempo.sock -`
+
+In another terminal:
+`NOTIFY_SOCKET=/tmp/tempo.sock WATCHDOG_USEC=5000000 python example.py`
+
+Expected output (in first terminal):
+```
+STATUS=Starting my service...
+READY=1
+STATUS=Init is complete...
+WATCHDOG=1
+STATUS=Sleeping and then notify x 3
+WATCHDOG=1
+WATCHDOG=1
+WATCHDOG=1
+STATUS=Spamming loop - should only see 2-3 notifications
+WATCHDOG=1
+WATCHDOG=1
+WATCHDOG=1
+STATUS=An irrecoverable error occured!
+WATCHDOG=trigger
 ```
 
 ## Public Interface
