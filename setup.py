@@ -7,7 +7,7 @@ def readme():
 setup(
     name="systemd-watchdog",
     version="0.9.0",
-    py_modules=["systemd_watchdog"],
+    packages=["systemd_watchdog"],
     author="AaronDMarasco",
     author_email="systemd-watchdog@marascos.net",
     description="sd_notify and sd_watchdog_enabled functionality for writing Python daemons under systemd",
